@@ -1,3 +1,9 @@
+"A datetime String with format `Y-m-d H:i:s`, e.g. `2018-01-01 13:00:00`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"A date String with format `Y-m-d`, e.g. `2011-05-23`."
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+
 type User {
     id: ID!
     name: String!
@@ -25,7 +31,7 @@ type Business {
 
 type Service {
     id: ID!
-    business: Business! @belongsTo(relation: "business")
+    business: Business! @belongsTo
     logo_url_0: String!
     logo_url_1: String!
     logo_url_2: String!
@@ -41,14 +47,30 @@ type Service {
     visible: Boolean!
 }
 
+type Event {
+    id: ID!
+    # user_id: String!
+    user: User! @belongsTo(relation: "user")
+    # service_id: String!
+    service: Service! @belongsTo(relation: "service")
+    date: Date!
+    time: String!
+    duration: Int!
+    real_price: Int!
+    vip_price: Int
+    tips: Int
+    status: String!
+}
+
 type Query {
     user(id: ID! @eq): User @find
     users: [User!]! @paginate
 
-    # business(id: ID! @eq): Business @find
-    # businesses: [Business!]! @paginate
     service(id: ID! @eq): Service @find
     services: [Service!]! @paginate
+
+    event(id: ID! @eq): Event @find
+
     me: User @auth(guard: "api")
 }
 
@@ -74,30 +96,57 @@ type Mutation {
         location: String
     ): Business @field(resolver: "BusinessMutator@create") @middleware(checks: ["auth:api"])
 
+    createEvent(
+        input: CreateEventInput! @spread
+    ): Event @create @middleware(checks: ["auth:api"])
+
     createService(
-        name: String!
-        business_id: Int!
-        logo_url_0: String
-        logo_url_1: String
-        logo_url_2: String
-        price: Int!
-        duration: Int!
-        description: String!
-        address: String!
-        location: String
-        phone: String!
-        work_hours: String!
-        break_hours: String!
-        visible: Boolean!
+        input: CreateServiceInput! @spread
     ): Service @create @middleware(checks: ["auth:api"])
 
     login(
         email: String! 
         password: String!
     ): String @field(resolver: "AuthMutator@resolver")
+}
 
-    # createArticle(
-    #     title: String! 
-    #     content: String!
-    # ): Article @field(resolver: "ArticleMutator@create") @middleware(checks: ["auth:api"])
+input CreateEventInput {
+    user: UserBelongsTo!
+    service: ServiceBelongsTo!
+    date: Date!
+    time: String!
+    duration: Int = 30
+    real_price: Int!
+    vip_price: Int
+    tips: Int = 0
+    status: String = "waiting"
+}
+
+input CreateServiceInput {
+    name: String!
+    logo_url_0: String
+    logo_url_1: String
+    logo_url_2: String
+    price: Int!
+    duration: Int!
+    description: String!
+    address: String!
+    location: String
+    phone: String!
+    work_hours: String!
+    break_hours: String!
+    visible: Boolean!
+    business: BusinessBelongsTo!
+}
+
+input BusinessBelongsTo {
+    connect: ID
+}
+
+input ServiceBelongsTo {
+    connect: ID
+}
+
+input UserBelongsTo {
+    connect: ID
 }

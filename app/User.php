@@ -48,7 +48,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Business::class, 'user_id');
     }
-
-    
-
 }

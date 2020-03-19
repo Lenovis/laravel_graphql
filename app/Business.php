@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Business extends Model
 {
@@ -26,7 +28,7 @@ class Business extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user(){
+    public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
 
@@ -35,7 +37,7 @@ class Business extends Model
      * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function services(){
+    public function services(): HasMany {
         return $this->hasMany(Service::class);
     }
 }

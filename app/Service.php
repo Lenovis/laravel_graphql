@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Service extends Model
 {
@@ -27,7 +28,7 @@ class Service extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function business(){
-        return $this->belongsTo(Business::class);
+    public function business(): BelongsTo{
+        return $this->belongsTo(Business::class, 'business_id');
     }
 }

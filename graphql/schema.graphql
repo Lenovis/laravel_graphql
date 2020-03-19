@@ -49,10 +49,8 @@ type Service {
 
 type Event {
     id: ID!
-    # user_id: String!
-    user: User! @belongsTo(relation: "user")
-    # service_id: String!
-    service: Service! @belongsTo(relation: "service")
+    user: User! @belongsTo
+    service: Service! @belongsTo
     date: Date!
     time: String!
     duration: Int!
@@ -69,7 +67,7 @@ type Query {
     service(id: ID! @eq): Service @find
     services: [Service!]! @paginate
 
-    event(id: ID! @eq): Event @find
+    # event(id: ID! @eq): Event @find
 
     me: User @auth(guard: "api")
 }
@@ -82,18 +80,7 @@ type Mutation {
     ): User @create
 
     createBusiness(
-        name: String!
-        description: String!
-        address: String!
-        phone: String!
-        work_m_f: String!
-        work_sat: String!
-        work_sun: String!
-        currency: String!
-        show_tips: Boolean!
-        logo_url: String
-        price_percent: String
-        location: String
+        input: CreateBusinessInput! @spread
     ): Business @field(resolver: "BusinessMutator@create") @middleware(checks: ["auth:api"])
 
     createEvent(
@@ -108,6 +95,21 @@ type Mutation {
         email: String! 
         password: String!
     ): String @field(resolver: "AuthMutator@resolver")
+}
+
+input CreateBusinessInput {
+    name: String!
+    description: String!
+    address: String!
+    phone: String!
+    work_m_f: String!
+    work_sat: String = ""
+    work_sun: String = ""
+    currency: String = "EUR"
+    show_tips: Boolean = true
+    logo_url: String
+    price_percent: String
+    location: String
 }
 
 input CreateEventInput {

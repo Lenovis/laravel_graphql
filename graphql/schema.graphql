@@ -10,6 +10,7 @@ type User {
     email: String!
     businesses: [Business] @hasMany
     messages: [Message] @hasMany
+    events: [Event] @hasMany
 }
 
 type Business {
@@ -34,6 +35,7 @@ type Business {
 type Service {
     id: ID!
     business: Business! @belongsTo
+    events: [Event] @hasMany
     logo_url_0: String!
     logo_url_1: String!
     logo_url_2: String!
@@ -72,13 +74,15 @@ type Message {
 }
 
 type Query {
+    # user/s fields parsing only for developing
     user(id: ID! @eq): User @find
     users: [User!]! @paginate
 
     service(id: ID! @eq): Service @find
     services: [Service!]! @paginate
 
-    event(id: ID! @eq): Event @find
+    event(id: ID! @eq): Event @find @middleware(checks: ["auth:api"])
+    my_events(user_id: ID! @eq): Event @paginate @middleware(checks: ["auth:api"])
 
     me: User @auth(guard: "api")
 }

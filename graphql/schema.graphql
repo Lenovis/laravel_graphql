@@ -102,10 +102,21 @@ type Mutation {
         input: CreateServiceInput! @spread
     ): Service @create @middleware(checks: ["auth:api"])
 
+    createMessage(
+        input: CreateMessageInput! @spread
+    ): Message @create @middleware(checks: ["auth:api"])
+
     login(
         email: String! 
         password: String!
     ): String @field(resolver: "AuthMutator@resolver")
+}
+
+input CreateMessageInput {
+    user: UserBelongsTo!
+    business: BusinessBelongsTo!
+    sender: String!
+    content: String!
 }
 
 input CreateBusinessInput {

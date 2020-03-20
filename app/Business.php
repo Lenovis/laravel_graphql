@@ -28,16 +28,18 @@ class Business extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user(): BelongsTo {
-        return $this->belongsTo(User::class);
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
+    public function services(): HasMany
+    {
+        return $this->hasMany(Service::class);
     }
 
-    /**
-     * The realtionship with Business
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function services(): HasMany {
-        return $this->hasMany(Service::class);
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
     }
 }

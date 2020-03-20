@@ -28,7 +28,8 @@ class Service extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function business(): BelongsTo{
+    public function business(): BelongsTo
+    {
         return $this->belongsTo(Business::class, 'business_id');
     }
 }

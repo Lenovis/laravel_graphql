@@ -8,7 +8,8 @@ type User {
     id: ID!
     name: String!
     email: String!
-    businesses: [Business!]! @hasMany
+    businesses: [Business] @hasMany
+    messages: [Message] @hasMany
 }
 
 type Business {
@@ -26,7 +27,8 @@ type Business {
     logo_url: String!
     price_percent: Int!
     owner: User! @belongsTo(relation: "user")
-    services: [Service!]! @hasMany
+    services: [Service] @hasMany
+    messages: [Message] @hasMany
 }
 
 type Service {
@@ -60,6 +62,15 @@ type Event {
     status: String!
 }
 
+type Message {
+    id: ID!
+    user: User! @belongsTo
+    business: Business! @belongsTo
+    sender: String!
+    content: String!
+    created_at: DateTime!
+}
+
 type Query {
     user(id: ID! @eq): User @find
     users: [User!]! @paginate
@@ -67,7 +78,7 @@ type Query {
     service(id: ID! @eq): Service @find
     services: [Service!]! @paginate
 
-    # event(id: ID! @eq): Event @find
+    event(id: ID! @eq): Event @find
 
     me: User @auth(guard: "api")
 }

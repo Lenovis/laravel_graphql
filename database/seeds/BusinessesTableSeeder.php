@@ -20,7 +20,7 @@ class BusinessesTableSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         User::all()->each(function ($user) use ($faker) {
-            foreach (range(1, 2) as $i) {
+            foreach (range(1, random_int(0, 3)) as $i) {
                 
                 $temp = $faker->randomFloat(5,54,56);
                 $temp .= " ";

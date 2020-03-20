@@ -21,7 +21,7 @@ class ServicesTableSeeder extends Seeder
         $faker = \Faker\Factory::create();
 
         Business::all()->each(function ($business) use ($faker) {
-            foreach (range(1, 2) as $i) {
+            foreach (range(1, random_int(0, 10)) as $i) {
                 
                 $temp = $faker->randomFloat(5,54,56);
                 $temp .= " ";

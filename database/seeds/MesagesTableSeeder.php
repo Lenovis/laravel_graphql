@@ -18,10 +18,10 @@ class MesagesTableSeeder extends Seeder
         Message::query()->delete();
 
         $faker= Factory::create();
+        $bcount = Business::all()->count();
 
-        User::all()->each(function ($user) use ($faker) {
-            $bcount = Business::all()->count();
-            foreach (range(1,random_int(5,30)) as $i) {
+        User::all()->each(function ($user) use ($faker, $bcount) {
+            foreach (range(1,random_int(5,20)) as $i) {
                 Message::create([
                     'user_id' => $user->id,
                     'business_id' => $faker->numberBetween(1, $bcount),

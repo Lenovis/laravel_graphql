@@ -8,9 +8,9 @@ type User {
     id: ID!
     name: String!
     email: String!
-    businesses: [Business] @hasMany
-    messages: [Message] @hasMany
-    events: [Event] @hasMany
+    businesses: [Business] @hasMany(type: "paginator" defaultCount: 10)
+    messages: [Message] @hasMany(type: "paginator" defaultCount: 10)
+    events: [Event] @hasMany(type: "paginator" defaultCount: 10)
 }
 
 type Business {
@@ -28,14 +28,14 @@ type Business {
     logo_url: String!
     price_percent: Int!
     owner: User! @belongsTo(relation: "user")
-    services: [Service] @hasMany
-    messages: [Message] @hasMany
+    services: [Service] @hasMany(type: "paginator" defaultCount: 10)
+    messages: [Message] @hasMany(type: "paginator" defaultCount: 10)
 }
 
 type Service {
     id: ID!
     business: Business! @belongsTo
-    events: [Event] @hasMany
+    events: [Event] @hasMany(type: "paginator" defaultCount: 10)
     logo_url_0: String!
     logo_url_1: String!
     logo_url_2: String!
@@ -76,13 +76,14 @@ type Message {
 type Query {
     # user/s fields parsing only for developing
     user(id: ID! @eq): User @find
-    users: [User!]! @paginate
+    users: [User!]! @paginate(defaultCount: 10)
+
+    my_businesses(user_id: ID! @eq): Business @paginate(defaultCount: 10) @middleware(checks: ["auth:api"])
 
     service(id: ID! @eq): Service @find
-    services: [Service!]! @paginate
+    services: [Service!]! @paginate(defaultCount: 10)
 
     event(id: ID! @eq): Event @find @middleware(checks: ["auth:api"])
-    my_events(user_id: ID! @eq): Event @paginate @middleware(checks: ["auth:api"])
 
     me: User @auth(guard: "api")
 }

@@ -33,7 +33,7 @@ class ServicesTableSeeder extends Seeder
                     'logo_url_1' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRV0I6VDKQ3vmT9y2QFvx7UZ4aTK_HZUbbHyIvmr_sgoa3sIBB6cg&s',
                     'logo_url_2' => '',
                     'name' => $faker->sentence,
-                    'description' => $faker->paragraph,
+                    'description' => $faker->text(50),
                     'address' => $faker->address,
                     'location' => $temp,
                     'phone' => $business->phone,

@@ -29,7 +29,7 @@ class BusinessesTableSeeder extends Seeder
                 Business::create([
                     'user_id' => $user->id,
                     'name' => $faker->sentence,
-                    'description' => $faker->paragraph,
+                    'description' => $faker->text(50),
                     'address' => $faker->address,
                     'location' => $temp,
                     'phone' => $user->phone,

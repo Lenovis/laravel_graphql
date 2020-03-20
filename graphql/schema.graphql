@@ -80,8 +80,12 @@ type Query {
 
     my_businesses(user_id: ID! @eq): Business @paginate(defaultCount: 10) @middleware(checks: ["auth:api"])
 
-    service(id: ID! @eq): Service @find
+    service_by_id(id: ID! @eq): Service @find
+    # dont forget to use % while inputing text
+    service_by_name(name: String! @where(operator: "like")): Service @paginate(defaultCount: 10)
     services: [Service!]! @paginate(defaultCount: 10)
+
+
 
     event(id: ID! @eq): Event @find @middleware(checks: ["auth:api"])
 

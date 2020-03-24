@@ -136,6 +136,10 @@ type Query {
     me: User @auth(guard: "api")
 }
 
+# type Subscription {
+#     userNotificationAppeared(author: ID): User_notification
+# }
+
 type Mutation {
     createUser(
         name: String!

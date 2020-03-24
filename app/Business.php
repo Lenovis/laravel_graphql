@@ -42,4 +42,9 @@ class Business extends Model
     {
         return $this->hasMany(Message::class);
     }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Business_notification::class);
+    }
 }

@@ -11,6 +11,7 @@ type User {
     businesses: [Business] @hasMany(type: "paginator" defaultCount: 10)
     messages: [Message] @hasMany(type: "paginator" defaultCount: 10)
     events: [Event] @hasMany(type: "paginator" defaultCount: 10)
+    notifications: [User_notification] @hasMany(type: "paginator" defaultCount: 20)
 }
 
 type Business {
@@ -30,6 +31,7 @@ type Business {
     owner: User! @belongsTo(relation: "user")
     services: [Service] @hasMany(type: "paginator" defaultCount: 10)
     messages: [Message] @hasMany(type: "paginator" defaultCount: 10)
+    notifications: [Business_notification] @hasMany(type: "paginator" defaultCount: 20)
 }
 
 type Service {
@@ -71,6 +73,20 @@ type Message {
     sender: String!
     content: String!
     created_at: DateTime!
+}
+
+type User_notification {
+    id: ID!
+    user: User! @belongsTo
+    business: Business! @belongsTo
+    content: String
+}
+
+type Business_notification {
+    id: ID!
+    user: User! @belongsTo
+    business: Business! @belongsTo
+    content: String
 }
 
 type Query {
@@ -119,6 +135,26 @@ type Mutation {
         email: String! 
         password: String!
     ): String @field(resolver: "AuthMutator@resolver")
+
+    createUserNotification(
+        input: CreateUserNotificationInput! @spread
+    ): User_notification @create @middleware(checks: ["auth:api"])
+
+    createBusinessNotification(
+        input: CreateBusinessNotificationInput! @spread
+    ): Business_notification @create @middleware(checks: ["auth:api"])
+}
+
+input CreateBusinessNotificationInput {
+    user: UserBelongsTo!
+    business: BusinessBelongsTo!
+    content: String!
+}
+
+input CreateUserNotificationInput {
+    user: UserBelongsTo!
+    business: BusinessBelongsTo!
+    content: String!
 }
 
 input CreateMessageInput {

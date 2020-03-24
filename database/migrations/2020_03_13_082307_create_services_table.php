@@ -16,9 +16,9 @@ class CreateServicesTable extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('business_id');
-            $table->string('logo_url_0')->nullable(); //It will be good to add here some defauld logo url
-            $table->string('logo_url_1')->nullable();
-            $table->string('logo_url_2')->nullable();
+            // $table->string('logo_url_0')->nullable(); //It will be good to add here some defauld logo url
+            // $table->string('logo_url_1')->nullable();
+            // $table->string('logo_url_2')->nullable();
             $table->string('name');
             $table->integer('price');
             $table->integer('duration');

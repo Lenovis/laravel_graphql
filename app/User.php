@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(User_notification::class);
     }
+
+    public function photos(): HasMany
+    {
+        return $this->hasMany(User_photo::class);
+    }
 }

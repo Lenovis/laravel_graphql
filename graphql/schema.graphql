@@ -12,6 +12,7 @@ type User {
     messages: [Message] @hasMany(type: "paginator" defaultCount: 10)
     events: [Event] @hasMany(type: "paginator" defaultCount: 10)
     notifications: [User_notification] @hasMany(type: "paginator" defaultCount: 20)
+    photos: [User_photo] @hasMany(type: "paginator" defaultCount: 5)
 }
 
 type Business {
@@ -26,21 +27,23 @@ type Business {
     work_sun: String!
     currency: String!
     show_tips: Boolean!
-    logo_url: String!
+    # logo_url: String!
     price_percent: Int!
     owner: User! @belongsTo(relation: "user")
     services: [Service] @hasMany(type: "paginator" defaultCount: 10)
     messages: [Message] @hasMany(type: "paginator" defaultCount: 10)
     notifications: [Business_notification] @hasMany(type: "paginator" defaultCount: 20)
+    photos: [Business_photo] @hasMany(type: "paginator" defaultCount: 5)
+
 }
 
 type Service {
     id: ID!
     business: Business! @belongsTo
     events: [Event] @hasMany(type: "paginator" defaultCount: 10)
-    logo_url_0: String!
-    logo_url_1: String!
-    logo_url_2: String!
+    # logo_url_0: String!
+    # logo_url_1: String!
+    # logo_url_2: String!
     name: String!
     price: Int!
     duration: String!
@@ -51,6 +54,7 @@ type Service {
     work_hours: String!
     break_hours: String!
     visible: Boolean!
+    photos: [Service_photo] @hasMany(type: "paginator" defaultCount: 5)
 }
 
 type Event {
@@ -87,6 +91,24 @@ type Business_notification {
     user: User! @belongsTo
     business: Business! @belongsTo
     content: String
+}
+
+type User_photo {
+    id: ID!
+    user: User!
+    photo_url: String!
+}
+
+type Business_photo {
+    id: ID!
+    business: Business!
+    photo_url: String!
+}
+
+type Service_photo {
+    id: ID!
+    service: Service!
+    photo_url: String!
 }
 
 type Query {
@@ -143,6 +165,33 @@ type Mutation {
     createBusinessNotification(
         input: CreateBusinessNotificationInput! @spread
     ): Business_notification @create @middleware(checks: ["auth:api"])
+
+    createUserPhoto(
+        input: CreateUserPhotoInput! @spread
+    ): User_photo @create @middleware(checks: ["auth:api"])
+
+    createBusinessPhoto(
+        input: CreateBusinessPhotoInput! @spread
+    ): Business_photo @create @middleware(checks: ["auth:api"])
+
+    createServicePhoto(
+        input: CreateServicePhotoInput! @spread
+    ): Service_photo @create @middleware(checks: ["auth:api"])
+}
+
+input CreateUserPhotoInput {
+    user: UserBelongsTo!
+    photo_url: String!
+}
+
+input CreateBusinessPhotoInput {
+    business: BusinessBelongsTo!
+    photo_url: String!
+}
+
+input CreateServicePhotoInput {
+    service: ServiceBelongsTo!
+    photo_url: String!
 }
 
 input CreateBusinessNotificationInput {
@@ -174,7 +223,6 @@ input CreateBusinessInput {
     work_sun: String = ""
     currency: String = "EUR"
     show_tips: Boolean = true
-    logo_url: String
     price_percent: String
     location: String
 }
@@ -193,9 +241,6 @@ input CreateEventInput {
 
 input CreateServiceInput {
     name: String!
-    logo_url_0: String
-    logo_url_1: String
-    logo_url_2: String
     price: Int!
     duration: Int!
     description: String!

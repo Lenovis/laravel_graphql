@@ -47,4 +47,9 @@ class Business extends Model
     {
         return $this->hasMany(Business_notification::class);
     }
+
+    public function photos(): HasMany
+    {
+        return $this->hasMany(Business_photo::class);
+    }
 }

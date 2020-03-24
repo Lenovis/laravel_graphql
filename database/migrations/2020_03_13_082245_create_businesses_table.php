@@ -26,7 +26,7 @@ class CreateBusinessesTable extends Migration
             $table->string('work_sun');
             $table->string('currency');
             $table->boolean('show_tips');
-            $table->string('logo_url')->nullable();
+            // $table->string('logo_url')->nullable();
             $table->string('price_percent')->default('0');
             $table->timestamps();
         });

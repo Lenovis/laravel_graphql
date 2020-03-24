@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Business;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -18,7 +19,7 @@ class BusinessMutator
      */
     public function create($rootValue, array $args, GraphQLContext $context)
     {
-        $business = new \App\Business($args);
+        $business = new Business($args);
         $context->user()->businesses()->save($business);
 
         return $business;

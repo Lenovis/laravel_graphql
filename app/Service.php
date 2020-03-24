@@ -38,4 +38,9 @@ class Service extends Model
     {
         return $this->hasMany(Event::class);
     }
+
+    public function photos(): HasMany
+    {
+        return $this->hasMany(Service_photo::class);
+    }
 }

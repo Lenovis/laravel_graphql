@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(User_photo::class);
     }
+
+    public function admin_of_businesses(): HasMany
+    {
+        return $this->hasMany(Admin_of_business::class);
+    }
 }

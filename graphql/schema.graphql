@@ -13,6 +13,7 @@ type User {
     events: [Event] @hasMany(type: "paginator" defaultCount: 10)
     notifications: [User_notification] @hasMany(type: "paginator" defaultCount: 20)
     photos: [User_photo] @hasMany(type: "paginator" defaultCount: 5)
+    admin_of_businesses: [Admin_of_business] @hasMany(type: "paginator" defaultCount:10)
 }
 
 type Business {
@@ -34,7 +35,7 @@ type Business {
     messages: [Message] @hasMany(type: "paginator" defaultCount: 10)
     notifications: [Business_notification] @hasMany(type: "paginator" defaultCount: 20)
     photos: [Business_photo] @hasMany(type: "paginator" defaultCount: 5)
-
+    admins_of_business: [Admin_of_business] @hasMany(type: "paginator" defaultCount:10)
 }
 
 type Service {
@@ -95,20 +96,27 @@ type Business_notification {
 
 type User_photo {
     id: ID!
-    user: User!
+    user: User! @belongsTo
     photo_url: String!
 }
 
 type Business_photo {
     id: ID!
-    business: Business!
+    business: Business! @belongsTo
     photo_url: String!
 }
 
 type Service_photo {
     id: ID!
-    service: Service!
+    service: Service! @belongsTo
     photo_url: String!
+}
+
+type Admin_of_business {
+    id: ID!
+    user: User! @belongsTo
+    business: Business! @belongsTo
+    status: String!
 }
 
 type Query {
@@ -122,8 +130,6 @@ type Query {
     # dont forget to use % while inputing text
     service_by_name(name: String! @where(operator: "like")): Service @paginate(defaultCount: 10)
     services: [Service!]! @paginate(defaultCount: 10)
-
-
 
     event(id: ID! @eq): Event @find @middleware(checks: ["auth:api"])
 
@@ -177,6 +183,16 @@ type Mutation {
     createServicePhoto(
         input: CreateServicePhotoInput! @spread
     ): Service_photo @create @middleware(checks: ["auth:api"])
+
+    createAdminOfBusiness(
+        input: CreateAdminOfBusinessInput! @spread
+    ): Admin_of_business @create @middleware(checks: ["auth:api"])
+}
+
+input CreateAdminOfBusinessInput {
+    user: UserBelongsTo!
+    business: BusinessBelongsTo!
+    status: String!
 }
 
 input CreateUserPhotoInput {

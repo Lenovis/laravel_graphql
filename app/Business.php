@@ -52,4 +52,9 @@ class Business extends Model
     {
         return $this->hasMany(Business_photo::class);
     }
+
+    public function admins_of_business(): HasMany
+    {
+        return $this->hasMany(Admin_of_business::class);
+    }
 }
